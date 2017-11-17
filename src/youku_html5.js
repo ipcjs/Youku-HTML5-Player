@@ -33,6 +33,8 @@ function createPopup(param) {
     div.style.height = div.firstChild.offsetHeight + 'px';
 }
 
+let fuck_youku = true;
+let fuck_youku_server = 'https://jx.maoyun.tv';
 let domain = location.href.match(/:\/\/([^/]+)/)[1];
 let vid = '';
 let objID = '';
@@ -184,20 +186,29 @@ function response2url(json) {
                 audioLangs[lang].src[type] = {
                     type: 'flv',
                     segments: [],
+                    fetch_playlist: false,
                     fetchM3U8: false,
                     playlist_url: data[lang][type].m3u8_url
                 };
                 for (let part of data[lang][type].segs) {
                     if (part.key == -1) {
-                        audioLangs[lang].src[type].partial = true;
-                        continue;
-                    }
-                    if (part.rtmp_url) {
+                        if (!fuck_youku) {
+                            audioLangs[lang].src[type].partial |= true;
+                            continue;
+                        } else {
+                            audioLangs[lang].src[type].segments.push({
+                                filesize: part.size | 0,
+                                duration: part.total_milliseconds_video | 0,
+                                backup_url: []
+                            });
+                            audioLangs[lang].src[type].fetch_playlist |= true;
+                        }
+                    } else if (part.rtmp_url) {
                         audioLangs[lang].src[type].segments.push({
                             filesize: part.size | 0,
                             duration: part.total_milliseconds_video | 0
                         });
-                        audioLangs[lang].src[type].fetchM3U8 = true;
+                        audioLangs[lang].src[type].fetchM3U8 |= true;
                     } else {
                         let seg = {
                             filesize: part.size | 0,
@@ -814,6 +825,126 @@ let createPlayer = function (e) {
     self.flvplayer.reloadSegment = reloadSegment;
 };
 
+function hex2string(hexStr, prefix = '\\x') {
+    let str = '';
+    let charLenght = prefix.length + 2;
+    if (hexStr.length % charLenght !== 0) {
+        throw `不是合法的hex字符串: ${hexStr}, ${prefix}`;
+    }
+    for (let i = 0; i < hexStr.length; i += charLenght) {
+        str += String.fromCharCode(parseInt(hexStr.substr(i + prefix.length, 2), 16));
+    }
+    return str;
+}
+
+let fetchPlaylistDoing = false;
+
+function fetchPlaylist(select) {
+    if (fetchPlaylistDoing) return;
+
+    fetchPlaylistDoing = true;
+    let id = location.href.split('?')[0];
+    let end = (success) => {
+        fetchPlaylistDoing = false; // 结束拉取真实地址
+        srcUrl[select].fetch_playlist = !success; // 成功, 则不需要再次拉取
+        if (success) {
+            changeSrc('', select, true);// 播放
+        } else {
+            // 三秒后重试 
+            setTimeout(() => fetchPlaylist(select), 3e3);
+        }
+    };
+    fetch(`${fuck_youku_server}/index.php?id=${id}`, {})
+        .then(resp => resp.text())
+        .then(text => {
+            // let html = new DOMParser().parseFromString(text, 'text/html');
+            // let md5 = html.querySelector('#hdMd5').value.toLowerCase();
+            let md5 = '';
+            let evalGroup = text.match(/eval\("((\\x\w\w)+)"\)/); // eval("\x24\x28\x27\x23\x68...");            
+            if (evalGroup) {
+                let evalContent = hex2string(evalGroup[1]); // $('#hdMd5').val('c23a9c741f6f8885cc4eb61228b0ffc0');
+                let evalContentGroup = evalContent.match(/\$\('#hdMd5'\)\.val\('(\w+)'\)/);
+                if (evalContentGroup) {
+                    md5 = evalContentGroup[1];
+                }
+            }
+            if (!md5) {
+                return Promise.reject('提取md5失败');
+            }
+            let formData = new URLSearchParams();
+            formData.append('id', id);
+            formData.append('md5', md5);
+            formData.append('type', 'auto');
+            console.log('fetchPlaylist index.php =>', id, md5, formData.toString());
+            return fetch(`${fuck_youku_server}/url.php`, { method: 'POST', body: formData });
+        })
+        .then(resp => resp.json())
+        .then(json => {
+            console.log('fetchPlaylist url.php =>', json);
+            if (json.msg === '200' && json.ext === 'm3u8_list' && json.url) {
+                // 接下来拉取m3u8
+                // srcUrl[select].fetchM3U8 = true;
+                // srcUrl[select].playlist_url = decodeURIComponent(json.url);
+                // fillWithM3u8(select, true);
+                return fetch(decodeURIComponent(json.url)); // 拉取m3u8
+            } else {
+                return Promise.reject(json);
+            }
+        })
+        .then(resp => resp.text())
+        .then(m3u8_text => {
+            let lines = m3u8_text.split('\n');
+            let m3u8 = {
+                segments: [],
+                version: 0,
+                targetDuration: 0,
+                totalDuration: 0,
+            };
+            let newSegment = function () {
+                let s = {
+                    duration: 0,
+                    uri: '',
+                };
+                m3u8.segments.push(s);
+                return s;
+            };
+            let segment = newSegment();
+            for (let line of lines) {
+                let group;
+                if ((group = line.match(/#EXT-X-VERSION:(\d+)/))) {
+                    m3u8.version = group[1];
+                } else if ((group = line.match(/#EXTINF:([0-9.]+),/))) {
+                    let duration = Math.round(+group[1] * 1000);
+                    segment.duration += duration;
+                    m3u8.totalDuration += duration;
+                } else if ((group = line.match(/https?:\/\/.*/))) {
+                    if (!segment.uri) { // 同一个片段中的uri, 除了ts_xxx参数不同, 其他部分都是相同的, 故只要添加一次就行了
+                        segment.uri = group[0].replace(/&(ts_start|ts_end|ts_seg_no|ts_keyframe)=[\d\.]+/g, '');   // 删掉多余的ts_xxx参数
+                    }
+                } else if ((group = line.match(/#EXT-X-DISCONTINUITY/))) {
+                    segment = newSegment(); // 新建一个片段
+                } else if ((group = line.match(/#EXT-X-TARGETDURATION([0-9.]+),/))) {
+                    m3u8.targetDuration = Math.round(+group[1] * 1000);
+                }
+            }
+            console.log('m3u8:', m3u8, 'duration:', m3u8.totalDuration, srcUrl[select].duration);
+            srcUrl[select].segments = [];
+            for (let s of m3u8.segments) {
+                srcUrl[select].segments.push({
+                    filesize: s.duration, // 直接把时长当成文件大小...
+                    duration: s.duration,
+                    url: s.uri,
+                    backup_url: []
+                });
+            }
+            end(true);
+        })
+        .catch(error => {
+            console.log('fetchPlaylist error:', error);
+            end(false);
+        });
+}
+
 function fillWithM3u8(select) {
     if (!srcUrl[select].playlist_url) {
         if (fetchedCount >= 10) {
@@ -929,7 +1060,10 @@ let load_fail = function (type, info, detail) {
 };
 let flvparam = function (select) {
     currentSrc = select;
-    if (srcUrl[select].fetchM3U8) {
+    if (srcUrl[select].fetch_playlist) {
+        fetchPlaylist(select);
+        return;
+    } else if (srcUrl[select].fetchM3U8) {
         //rtmp视频流，使用m3u8地址播放
         fillWithM3u8(select);
         changeSrc('', select, true);
