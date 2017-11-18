@@ -1,2 +1,9 @@
 /test/
+/src/md5.js
+
+build/
+tmp/
 .idea/
+
+*.min.js
+*.zip

@@ -48,7 +48,9 @@ const uglifyOption = {
 
 ['ABPlayer', 'biliplus_shield', 'CommentCoreLibrary', 'google-style-loading'].forEach(function (name) {
     console.log(name);
-    fs.writeFileSync(name + ".min.js", minjs.minify(
-        fs.readFileSync(name + ".js", "utf8")
-        , uglifyOption).code, "utf8");
+    if (fs.existsSync(name + '.js')) {
+        fs.writeFileSync(name + ".min.js", minjs.minify(
+            fs.readFileSync(name + ".js", "utf8")
+            , uglifyOption).code, "utf8");
+    }
 });

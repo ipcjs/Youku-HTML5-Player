@@ -923,7 +923,7 @@ function fetchPlaylist(select) {
                     }
                 } else if ((group = line.match(/#EXT-X-DISCONTINUITY/))) {
                     segment = newSegment(); // 新建一个片段
-                } else if ((group = line.match(/#EXT-X-TARGETDURATION([0-9.]+),/))) {
+                } else if ((group = line.match(/#EXT-X-TARGETDURATION:([0-9.]+),/))) {
                     m3u8.targetDuration = Math.round(+group[1] * 1000);
                 }
             }
