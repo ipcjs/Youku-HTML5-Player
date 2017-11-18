@@ -931,7 +931,7 @@ function fetchPlaylist(select) {
             srcUrl[select].segments = [];
             for (let s of m3u8.segments) {
                 srcUrl[select].segments.push({
-                    filesize: s.duration, // 直接把时长当成文件大小...
+                    filesize: s.duration * 300, // 一般原画的视频是200倍
                     duration: s.duration,
                     url: s.uri,
                     backup_url: []
