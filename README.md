@@ -1,9 +1,4 @@
-# FUCK YOUKU
-
-1. 下载该分支下的`youku_html5.js`文件
-2. 替换已经安装的该扩展中的同名文件
-
-# Yet Another Player for Youku - 更好用的优酷播放器 扩展
+# Yet Another Player for Youku - 更好用的优酷播放器 扩展  
 作者：esterTion  
 
 > 旧名`Youku HTML5播放器`  
