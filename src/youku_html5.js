@@ -33,8 +33,125 @@ function createPopup(param) {
     div.style.height = div.firstChild.offsetHeight + 'px';
 }
 
-let fuck_youku = true;
-let fuck_youku_server = 'https://jx.maoyun.tv';
+let fuck_youku_baiyug = {
+    server: 'http://api.baiyug.cn',
+    proxy_server: 'http://baiyug.ipcjs.win',
+    _sign: function (str) {
+        let that = this;
+        !function (n) { "use strict"; function t(n, t) { var r = (65535 & n) + (65535 & t); return (n >> 16) + (t >> 16) + (r >> 16) << 16 | 65535 & r } function r(n, t) { return n << t | n >>> 32 - t } function e(n, e, o, u, c, f) { return t(r(t(t(e, n), t(u, f)), c), o) } function o(n, t, r, o, u, c, f) { return e(t & r | ~t & o, n, t, u, c, f) } function u(n, t, r, o, u, c, f) { return e(t & o | r & ~o, n, t, u, c, f) } function c(n, t, r, o, u, c, f) { return e(t ^ r ^ o, n, t, u, c, f) } function f(n, t, r, o, u, c, f) { return e(r ^ (t | ~o), n, t, u, c, f) } function i(n, r) { n[r >> 5] |= 128 << r % 32, n[14 + (r + 64 >>> 9 << 4)] = r; var e, i, a, d, h, l = 1732584193, g = -271733879, v = -1732584194, m = 271733878; for (e = 0; e < n.length; e += 16)i = l, a = g, d = v, h = m, g = f(g = f(g = f(g = f(g = c(g = c(g = c(g = c(g = u(g = u(g = u(g = u(g = o(g = o(g = o(g = o(g, v = o(v, m = o(m, l = o(l, g, v, m, n[e], 7, -680876936), g, v, n[e + 1], 12, -389564586), l, g, n[e + 2], 17, 606105819), m, l, n[e + 3], 22, -1044525330), v = o(v, m = o(m, l = o(l, g, v, m, n[e + 4], 7, -176418897), g, v, n[e + 5], 12, 1200080426), l, g, n[e + 6], 17, -1473231341), m, l, n[e + 7], 22, -45705983), v = o(v, m = o(m, l = o(l, g, v, m, n[e + 8], 7, 1770035416), g, v, n[e + 9], 12, -1958414417), l, g, n[e + 10], 17, -42063), m, l, n[e + 11], 22, -1990404162), v = o(v, m = o(m, l = o(l, g, v, m, n[e + 12], 7, 1804603682), g, v, n[e + 13], 12, -40341101), l, g, n[e + 14], 17, -1502002290), m, l, n[e + 15], 22, 1236535329), v = u(v, m = u(m, l = u(l, g, v, m, n[e + 1], 5, -165796510), g, v, n[e + 6], 9, -1069501632), l, g, n[e + 11], 14, 643717713), m, l, n[e], 20, -373897302), v = u(v, m = u(m, l = u(l, g, v, m, n[e + 5], 5, -701558691), g, v, n[e + 10], 9, 38016083), l, g, n[e + 15], 14, -660478335), m, l, n[e + 4], 20, -405537848), v = u(v, m = u(m, l = u(l, g, v, m, n[e + 9], 5, 568446438), g, v, n[e + 14], 9, -1019803690), l, g, n[e + 3], 14, -187363961), m, l, n[e + 8], 20, 1163531501), v = u(v, m = u(m, l = u(l, g, v, m, n[e + 13], 5, -1444681467), g, v, n[e + 2], 9, -51403784), l, g, n[e + 7], 14, 1735328473), m, l, n[e + 12], 20, -1926607734), v = c(v, m = c(m, l = c(l, g, v, m, n[e + 5], 4, -378558), g, v, n[e + 8], 11, -2022574463), l, g, n[e + 11], 16, 1839030562), m, l, n[e + 14], 23, -35309556), v = c(v, m = c(m, l = c(l, g, v, m, n[e + 1], 4, -1530992060), g, v, n[e + 4], 11, 1272893353), l, g, n[e + 7], 16, -155497632), m, l, n[e + 10], 23, -1094730640), v = c(v, m = c(m, l = c(l, g, v, m, n[e + 13], 4, 681279174), g, v, n[e], 11, -358537222), l, g, n[e + 3], 16, -722521979), m, l, n[e + 6], 23, 76029189), v = c(v, m = c(m, l = c(l, g, v, m, n[e + 9], 4, -640364487), g, v, n[e + 12], 11, -421815835), l, g, n[e + 15], 16, 530742520), m, l, n[e + 2], 23, -995338651), v = f(v, m = f(m, l = f(l, g, v, m, n[e], 6, -198630844), g, v, n[e + 7], 10, 1126891415), l, g, n[e + 14], 15, -1416354905), m, l, n[e + 5], 21, -57434055), v = f(v, m = f(m, l = f(l, g, v, m, n[e + 12], 6, 1700485571), g, v, n[e + 3], 10, -1894986606), l, g, n[e + 10], 15, -1051523), m, l, n[e + 1], 21, -2054922799), v = f(v, m = f(m, l = f(l, g, v, m, n[e + 8], 6, 1873313359), g, v, n[e + 15], 10, -30611744), l, g, n[e + 6], 15, -1560198380), m, l, n[e + 13], 21, 1309151649), v = f(v, m = f(m, l = f(l, g, v, m, n[e + 4], 6, -145523070), g, v, n[e + 11], 10, -1120210379), l, g, n[e + 2], 15, 718787259), m, l, n[e + 9], 21, -343485551), l = t(l, i), g = t(g, a), v = t(v, d), m = t(m, h); return [l, g, v, m] } function a(n) { var t, r = "", e = 32 * n.length; for (t = 0; t < e; t += 8)r += String.fromCharCode(n[t >> 5] >>> t % 32 & 255); return r } function d(n) { var t, r = []; for (r[(n.length >> 2) - 1] = void 0, t = 0; t < r.length; t += 1)r[t] = 0; var e = 8 * n.length; for (t = 0; t < e; t += 8)r[t >> 5] |= (255 & n.charCodeAt(t / 8)) << t % 32; return r } function h(n) { return a(i(d(n), 8 * n.length)) } function l(n, t) { var r, e, o = d(n), u = [], c = []; for (u[15] = c[15] = void 0, o.length > 16 && (o = i(o, 8 * n.length)), r = 0; r < 16; r += 1)u[r] = 909522486 ^ o[r], c[r] = 1549556828 ^ o[r]; return e = i(u.concat(d(t)), 512 + 8 * t.length), a(i(c.concat(e), 640)) } function g(n) { var t, r, e = ""; for (r = 0; r < n.length; r += 1)t = n.charCodeAt(r), e += "0123456789abcdef".charAt(t >>> 4 & 15) + "0123456789abcdef".charAt(15 & t); return e } function v(n) { return unescape(encodeURIComponent(n)) } function m(n) { return h(v(n)) } function p(n) { return g(m(n)) } function s(n, t) { return l(v(n), v(t)) } function C(n, t) { return g(s(n, t)) } function A(n, t, r) { return t ? r ? s(t, n) : C(t, n) : r ? m(n) : p(n) } "function" == typeof define && define.amd ? define(function () { return A }) : "object" == typeof module && module.exports ? module.exports = A : n.md5 = A }(that);
+        var _0x9ba7 = ["\x64\x20\x31\x3D\x5B\x22\x5C\x62\x5C\x33\x5C\x34\x5C\x63\x5C\x35\x5C\x37\x5C\x38\x5C\x33\x5C\x35\x5C\x34\x5C\x39\x5C\x61\x22\x5D\x3B\x36\x2B\x32\x5B\x31\x5B\x30\x5D\x5D\x28\x65\x29\x2B\x32\x5B\x31\x5B\x30\x5D\x5D\x28\x66\x29\x2B\x32\x5B\x31\x5B\x30\x5D\x5D\x28\x67\x29\x2B\x32\x5B\x31\x5B\x30\x5D\x5D\x28\x68\x29\x2B\x32\x5B\x31\x5B\x30\x5D\x5D\x28\x69\x29\x2B\x32\x5B\x31\x5B\x30\x5D\x5D\x28\x6A\x29\x2B\x32\x5B\x31\x5B\x30\x5D\x5D\x28\x6B\x29\x2B\x32\x5B\x31\x5B\x30\x5D\x5D\x28\x6C\x29", "\x7C", "\x73\x70\x6C\x69\x74", "\x7C\x5F\x30\x78\x62\x37\x38\x30\x7C\x53\x74\x72\x69\x6E\x67\x7C\x78\x37\x32\x7C\x78\x36\x46\x7C\x78\x34\x33\x7C\x73\x74\x72\x7C\x78\x36\x38\x7C\x78\x36\x31\x7C\x78\x36\x34\x7C\x78\x36\x35\x7C\x78\x36\x36\x7C\x78\x36\x44\x7C\x76\x61\x72\x7C\x33\x33\x7C\x39\x37\x7C\x39\x38\x7C\x31\x30\x31\x7C\x31\x30\x32\x7C\x35\x37\x7C\x35\x36\x7C\x35\x35", "\x72\x65\x70\x6C\x61\x63\x65", "", "\x5C\x77\x2B", "\x5C\x62", "\x67", "\x73\x75\x62\x73\x74\x72\x69\x6E\x67", "\x38\x61\x62\x35\x64\x36", "\x6C\x6F\x69\x6A"]; function sign(str) { var abc = that.md5(eval(function (p, a, c, k, e, r) { e = function (c) { return c.toString(a) }; if (!_0x9ba7[5][_0x9ba7[4]](/^/, String)) { while (c--) { r[e(c)] = k[c] || e(c) }; k = [function (e) { return r[e] }]; e = function () { return _0x9ba7[6] }; c = 1 }; while (c--) { if (k[c]) { p = p[_0x9ba7[4]](new RegExp(_0x9ba7[7] + e(c) + _0x9ba7[7], _0x9ba7[8]), k[c]) } }; return p }(_0x9ba7[0], 22, 22, _0x9ba7[3][_0x9ba7[2]](_0x9ba7[1]), 0, {}))); var _a = abc[_0x9ba7[9]](10, 22); var _b = abc[_0x9ba7[9]](24, 30); return (![] + [])[+!+[]] + (+(+!+[] + [+!+[]]))[(!![] + [])[+[]] + (!![] + [][(![] + [])[+[]] + ([![]] + [][[]])[+!+[] + [+[]]] + (![] + [])[!+[] + !+[]] + (!![] + [])[+[]] + (!![] + [])[!+[] + !+[] + !+[]] + (!![] + [])[+!+[]]])[+!+[] + [+[]]] + (+![] + ([] + [])[([][(![] + [])[+[]] + ([![]] + [][[]])[+!+[] + [+[]]] + (![] + [])[!+[] + !+[]] + (!![] + [])[+[]] + (!![] + [])[!+[] + !+[] + !+[]] + (!![] + [])[+!+[]]] + [])[!+[] + !+[] + !+[]] + (!![] + [][(![] + [])[+[]] + ([![]] + [][[]])[+!+[] + [+[]]] + (![] + [])[!+[] + !+[]] + (!![] + [])[+[]] + (!![] + [])[!+[] + !+[] + !+[]] + (!![] + [])[+!+[]]])[+!+[] + [+[]]] + ([][[]] + [])[+!+[]] + (![] + [])[!+[] + !+[] + !+[]] + (!![] + [])[+[]] + (!![] + [])[+!+[]] + ([][[]] + [])[+[]] + ([][(![] + [])[+[]] + ([![]] + [][[]])[+!+[] + [+[]]] + (![] + [])[!+[] + !+[]] + (!![] + [])[+[]] + (!![] + [])[!+[] + !+[] + !+[]] + (!![] + [])[+!+[]]] + [])[!+[] + !+[] + !+[]] + (!![] + [])[+[]] + (!![] + [][(![] + [])[+[]] + ([![]] + [][[]])[+!+[] + [+[]]] + (![] + [])[!+[] + !+[]] + (!![] + [])[+[]] + (!![] + [])[!+[] + !+[] + !+[]] + (!![] + [])[+!+[]]])[+!+[] + [+[]]] + (!![] + [])[+!+[]]])[+!+[] + [+[]]] + (!![] + [])[+[]] + (!![] + [])[+!+[]] + ([![]] + [][[]])[+!+[] + [+[]]] + ([][[]] + [])[+!+[]] + (+![] + [![]] + ([] + [])[([][(![] + [])[+[]] + ([![]] + [][[]])[+!+[] + [+[]]] + (![] + [])[!+[] + !+[]] + (!![] + [])[+[]] + (!![] + [])[!+[] + !+[] + !+[]] + (!![] + [])[+!+[]]] + [])[!+[] + !+[] + !+[]] + (!![] + [][(![] + [])[+[]] + ([![]] + [][[]])[+!+[] + [+[]]] + (![] + [])[!+[] + !+[]] + (!![] + [])[+[]] + (!![] + [])[!+[] + !+[] + !+[]] + (!![] + [])[+!+[]]])[+!+[] + [+[]]] + ([][[]] + [])[+!+[]] + (![] + [])[!+[] + !+[] + !+[]] + (!![] + [])[+[]] + (!![] + [])[+!+[]] + ([][[]] + [])[+[]] + ([][(![] + [])[+[]] + ([![]] + [][[]])[+!+[] + [+[]]] + (![] + [])[!+[] + !+[]] + (!![] + [])[+[]] + (!![] + [])[!+[] + !+[] + !+[]] + (!![] + [])[+!+[]]] + [])[!+[] + !+[] + !+[]] + (!![] + [])[+[]] + (!![] + [][(![] + [])[+[]] + ([![]] + [][[]])[+!+[] + [+[]]] + (![] + [])[!+[] + !+[]] + (!![] + [])[+[]] + (!![] + [])[!+[] + !+[] + !+[]] + (!![] + [])[+!+[]]])[+!+[] + [+[]]] + (!![] + [])[+!+[]]])[!+[] + !+[] + [+[]]]](!+[] + !+[] + [+[]]) + [!+[] + !+[] + !+[] + !+[] + !+[]] + [!+[] + !+[] + !+[] + !+[] + !+[] + !+[] + !+[] + !+[] + !+[]] + _b + _0x9ba7[10] + _a + _0x9ba7[11] }
+        return sign(str);
+    },
+    _getIndexUrl: function (id) {
+        return `${this.proxy_server}/vip_pppp/vip_pppppppp.php?url=${id}&type=youku`;
+    },
+    _getUrlUrl: function () {
+        return `${this.proxy_server}/vip_pppp/baiyug.php`;
+    },
+    fetchPromise: function ({ url: id, select }) {
+        return fetch(this._getIndexUrl(id), { referrerPolicy: 'no-referrer' })
+            .then(resp => resp.text())
+            .then(text => {
+                let md5 = '';
+                let evalGroup = text.match(/eval\("((\\x\w\w)+)"\)/); // eval("\x24\x28\x27\x23\x68...");            
+                if (evalGroup) {
+                    let evalContent = hex2string(evalGroup[1]); // $('#hdMd5').val('c23a9c741f6f8885cc4eb61228b0ffc0');
+                    let evalContentGroup = evalContent.match(/\$\('#hdMd5'\)\.val\('(\w+)'\)/);
+                    if (evalContentGroup) {
+                        md5 = this._sign(evalContentGroup[1]);
+                    }
+                }
+                if (!md5) {
+                    return Promise.reject('提取md5失败');
+                }
+                let formData = new URLSearchParams();
+                formData.append('id', id);
+                formData.append('md5', md5);
+                formData.append('type', 'youku');
+                // formData.append('hd', '4');
+                console.log('fetchPlaylist index.php =>', id, md5, formData.toString());
+                return fetch(this._getUrlUrl(), { method: 'POST', body: formData, referrerPolicy: 'no-referrer' });
+            })
+            .then(resp => resp.json())
+            .then(json => {
+                console.log('fetchPlaylist url.php =>', json);
+                if (json.msg === '200' && json.ext === 'm3u8_list' && json.url) {
+                    // 接下来拉取m3u8
+                    return fetch(decodeURIComponent(json.url).replace(this.server, this.proxy_server), { referrerPolicy: 'no-referrer' }); // 拉取m3u8
+                } else {
+                    return Promise.reject(json);
+                }
+            })
+            .then(resp => m3u8RespToPlaylist({ m3u8Resp: resp, select }))
+    }
+}
+
+function m3u8RespToPlaylist({ m3u8Resp, select }) {
+    return m3u8Resp.text()
+        .then(m3u8_text => {
+            let m3u8 = parseM3U8(m3u8_text);
+            console.log('m3u8:', m3u8, 'duration:', m3u8.totalDuration, srcUrl[select].duration);
+            srcUrl[select].segments = m3u8.segments.map(s => ({
+                filesize: s.duration * 300, // 一般原画的视频是200倍
+                duration: s.duration,
+                url: s.uri,
+                backup_url: []
+            }));
+        })
+}
+
+let fuck_youku_maoyun = {
+    server: 'https://jx.maoyun.tv',
+    proxy_server: 'http://maoyun.ipcjs.win',
+    _getIndexUrl: function (id) {
+        return `${this.proxy_server}/index.php?id=${id}`;
+    },
+    _getUrlUrl: function () {
+        return `${this.proxy_server}/url.php`;
+    },
+    _sign: fuck_youku_baiyug._sign,
+    fetchPromise: fuck_youku_baiyug.fetchPromise
+}
+
+// 各种破解不正常, 不可用
+let fuck_youku_163ren = {
+    server: 'https://jx.api.163ren.com',
+    proxy_server: 'http://163ren.ipcjs.win',
+    fetchPromise: function ({ url, select }) {
+        // referrer一定要是this.server, 但浏览器中不能随便指定referrer, 故该接口不可用...
+        // => 代理了原接口, 接口可以用了
+        // => 貌似认证流程又改了...不可用
+        return fetch(`${this.proxy_server}/ssl.php?url=${url}`, { referrerPolicy: 'no-referrer' })
+            .then(resp => resp.text())
+            .then(text => {
+                let urlGroup;
+                if (urlGroup = text.match(/url\s*:\s*'(\S+)',/)) {
+                    return fetch(`${this.server}/api.php?url=${urlGroup[1]}&hd=2`);
+                } else {
+                    return Promise.reject(`未找到url(${text})`);
+                }
+            })
+            .then(resp => resp.text())
+            .then(xml_text => {
+                let xml = new DOMParser().parseFromString(xml_text, 'text/xml');
+                let fileList = [...xml.querySelectorAll('file')].map(it => it.textContent);
+                let sizeList = [...xml.querySelectorAll('size')].map(it => it.textContent);
+                let secondsList = [...xml.querySelectorAll('seconds')].map(it => it.textContent);
+                srcUrl[select].segments = fileList.map((file, index) => {
+                    if (!file) console.log('fetchPlaylist error:', `破解服务器(${this.server})并不能破解该视频...`);
+                    return {
+                        filesize: +sizeList[index],
+                        duration: Math.round(+secondsList[index] * 1000),
+                        url: file,
+                        backup_url: []
+                    }
+                });
+            });
+    }
+}
+let fuck_youku = fuck_youku_maoyun;
+// let fuck_youku = null;
+
 let domain = location.href.match(/:\/\/([^/]+)/)[1];
 let vid = '';
 let objID = '';
@@ -837,111 +954,74 @@ function hex2string(hexStr, prefix = '\\x') {
     return str;
 }
 
+function parseM3U8(m3u8_text) {
+    let lines = m3u8_text.split('\n');
+    let m3u8 = {
+        segments: [],
+        version: 0,
+        targetDuration: 0,
+        totalDuration: 0,
+    };
+    let newSegment = function () {
+        let s = {
+            duration: 0,
+            uri: '',
+        };
+        m3u8.segments.push(s);
+        return s;
+    };
+    let segment = newSegment();
+    for (let line of lines) {
+        let group;
+        if ((group = line.match(/#EXT-X-VERSION:(\d+)/))) {
+            m3u8.version = group[1];
+        } else if ((group = line.match(/#EXTINF:([0-9.]+),/))) {
+            let duration = Math.round(+group[1] * 1000);
+            segment.duration += duration;
+            m3u8.totalDuration += duration;
+        } else if ((group = line.match(/https?:\/\/.*/))) {
+            if (!segment.uri) { // 同一个片段中的uri, 除了ts_xxx参数不同, 其他部分都是相同的, 故只要添加一次就行了
+                segment.uri = group[0].replace(/&(ts_start|ts_end|ts_seg_no|ts_keyframe)=[\d\.]+/g, '');   // 删掉多余的ts_xxx参数
+            }
+        } else if ((group = line.match(/#EXT-X-DISCONTINUITY/))) {
+            segment = newSegment(); // 新建一个片段
+        } else if ((group = line.match(/#EXT-X-TARGETDURATION:([0-9.]+),/))) {
+            m3u8.targetDuration = Math.round(+group[1] * 1000);
+        }
+    }
+    return m3u8;
+}
+
 let fetchPlaylistDoing = false;
+let fetchPlaylistRetryCount = 0;
 
 function fetchPlaylist(select) {
     if (fetchPlaylistDoing) return;
 
     fetchPlaylistDoing = true;
     let id = location.href.split('?')[0];
-    let end = (success) => {
+    let onEnd = (success) => {
         fetchPlaylistDoing = false; // 结束拉取真实地址
         srcUrl[select].fetch_playlist = !success; // 成功, 则不需要再次拉取
         if (success) {
+            fetchPlaylistRetryCount = 0;
             changeSrc('', select, true);// 播放
         } else {
-            // 三秒后重试 
-            setTimeout(() => fetchPlaylist(select), 3e3);
+            fetchPlaylistRetryCount++;
+            if (fetchPlaylistRetryCount < 3) {
+                // 三秒后重试 
+                setTimeout(() => fetchPlaylist(select), 3e3);
+            }
         }
     };
-    fetch(`${fuck_youku_server}/index.php?id=${id}`, {})
-        .then(resp => resp.text())
-        .then(text => {
-            // let html = new DOMParser().parseFromString(text, 'text/html');
-            // let md5 = html.querySelector('#hdMd5').value.toLowerCase();
-            let md5 = '';
-            let evalGroup = text.match(/eval\("((\\x\w\w)+)"\)/); // eval("\x24\x28\x27\x23\x68...");            
-            if (evalGroup) {
-                let evalContent = hex2string(evalGroup[1]); // $('#hdMd5').val('c23a9c741f6f8885cc4eb61228b0ffc0');
-                let evalContentGroup = evalContent.match(/\$\('#hdMd5'\)\.val\('(\w+)'\)/);
-                if (evalContentGroup) {
-                    md5 = evalContentGroup[1];
-                }
-            }
-            if (!md5) {
-                return Promise.reject('提取md5失败');
-            }
-            let formData = new URLSearchParams();
-            formData.append('id', id);
-            formData.append('md5', md5);
-            formData.append('type', 'auto');
-            console.log('fetchPlaylist index.php =>', id, md5, formData.toString());
-            return fetch(`${fuck_youku_server}/url.php`, { method: 'POST', body: formData });
-        })
-        .then(resp => resp.json())
-        .then(json => {
-            console.log('fetchPlaylist url.php =>', json);
-            if (json.msg === '200' && json.ext === 'm3u8_list' && json.url) {
-                // 接下来拉取m3u8
-                // srcUrl[select].fetchM3U8 = true;
-                // srcUrl[select].playlist_url = decodeURIComponent(json.url);
-                // fillWithM3u8(select, true);
-                return fetch(decodeURIComponent(json.url)); // 拉取m3u8
-            } else {
-                return Promise.reject(json);
-            }
-        })
-        .then(resp => resp.text())
-        .then(m3u8_text => {
-            let lines = m3u8_text.split('\n');
-            let m3u8 = {
-                segments: [],
-                version: 0,
-                targetDuration: 0,
-                totalDuration: 0,
-            };
-            let newSegment = function () {
-                let s = {
-                    duration: 0,
-                    uri: '',
-                };
-                m3u8.segments.push(s);
-                return s;
-            };
-            let segment = newSegment();
-            for (let line of lines) {
-                let group;
-                if ((group = line.match(/#EXT-X-VERSION:(\d+)/))) {
-                    m3u8.version = group[1];
-                } else if ((group = line.match(/#EXTINF:([0-9.]+),/))) {
-                    let duration = Math.round(+group[1] * 1000);
-                    segment.duration += duration;
-                    m3u8.totalDuration += duration;
-                } else if ((group = line.match(/https?:\/\/.*/))) {
-                    if (!segment.uri) { // 同一个片段中的uri, 除了ts_xxx参数不同, 其他部分都是相同的, 故只要添加一次就行了
-                        segment.uri = group[0].replace(/&(ts_start|ts_end|ts_seg_no|ts_keyframe)=[\d\.]+/g, '');   // 删掉多余的ts_xxx参数
-                    }
-                } else if ((group = line.match(/#EXT-X-DISCONTINUITY/))) {
-                    segment = newSegment(); // 新建一个片段
-                } else if ((group = line.match(/#EXT-X-TARGETDURATION:([0-9.]+),/))) {
-                    m3u8.targetDuration = Math.round(+group[1] * 1000);
-                }
-            }
-            console.log('m3u8:', m3u8, 'duration:', m3u8.totalDuration, srcUrl[select].duration);
-            srcUrl[select].segments = [];
-            for (let s of m3u8.segments) {
-                srcUrl[select].segments.push({
-                    filesize: s.duration * 300, // 一般原画的视频是200倍
-                    duration: s.duration,
-                    url: s.uri,
-                    backup_url: []
-                });
-            }
-            end(true);
+    fuck_youku.fetchPromise({ url: id, select: select })
+        .then(result => {
+            console.log('fetchPlaylist result:', srcUrl[select]);
+            onEnd(true);
         })
         .catch(error => {
             console.log('fetchPlaylist error:', error);
-            end(false);
+            onEnd(false);
         });
 }
 

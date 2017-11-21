@@ -6,4 +6,6 @@ tmp/
 .idea/
 
 *.min.js
+*.min.js.map
 *.zip
+*.d.ts
