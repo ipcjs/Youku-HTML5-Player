@@ -67,7 +67,7 @@ let fuck_youku_baiyug = {
                 let formData = new URLSearchParams();
                 formData.append('id', id);
                 formData.append('md5', md5);
-                formData.append('type', 'youku');
+                formData.append('type', 'auto'); // 若使用'youku', 返回的url可能是xml_client, 而不是m3u8...
                 // formData.append('hd', '4');
                 console.log('fetchPlaylist index.php =>', id, md5, formData.toString());
                 return fetch(this._getUrlUrl(), { method: 'POST', body: formData, referrerPolicy: 'no-referrer' });
@@ -75,7 +75,7 @@ let fuck_youku_baiyug = {
             .then(resp => resp.json())
             .then(json => {
                 console.log('fetchPlaylist url.php =>', json);
-                if (json.msg === '200' && json.ext === 'm3u8_list' && json.url) {
+                if (json.msg === '200' && json.url && ['m3u8_list', 'm3u8', 'm3u8_list_youku'].includes(json.ext)) {
                     // 接下来拉取m3u8
                     return fetch(decodeURIComponent(json.url).replace(this.server, this.proxy_server), { referrerPolicy: 'no-referrer' }); // 拉取m3u8
                 } else {
